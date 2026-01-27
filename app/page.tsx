@@ -46,14 +46,14 @@ function DashboardContent() {
       {/* Hero Section - Status Overview */}
       <section className="mb-8" aria-labelledby="status-heading">
         <h2 id="status-heading" className="sr-only">System Status</h2>
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-6 rounded-xl bg-surface/80 backdrop-blur-md border border-border">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 p-4 rounded-xl bg-surface/80 backdrop-blur-md border border-border">
           <div className="flex items-center gap-4">
             {metrics ? (
               <>
                 <SyncStatusIndicator status={metrics.lastRun.status} />
                 <div className="border-l border-border pl-4">
                   <p className="text-sm text-text-secondary">Last Sync</p>
-                  <p className="text-lg font-semibold text-text-primary font-mono">
+                  <p className="text-base font-semibold text-text-primary font-mono">
                     {new Date(metrics.lastRun.timestamp).toLocaleTimeString()}
                   </p>
                 </div>

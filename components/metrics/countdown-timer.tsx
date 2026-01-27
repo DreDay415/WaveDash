@@ -29,14 +29,14 @@ export function CountdownTimer({
 
   return (
     <Card className={cn("bg-primary-light border-primary/20", className)}>
-      <CardContent className="pt-6">
-        <div className="flex items-center gap-4">
-          <div className="rounded-full bg-primary/20 p-3">
-            <Clock className="w-6 h-6 text-primary" />
+      <CardContent className="py-4">
+        <div className="flex items-center gap-3">
+          <div className="rounded-full bg-primary/20 p-2">
+            <Clock className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <p className="text-sm text-text-secondary mb-1">{label}</p>
-            <p className="text-2xl font-bold text-primary font-mono">
+            <p className="text-xs text-text-secondary mb-1">{label}</p>
+            <p className="text-xl font-bold text-primary font-mono">
               {countdown}
             </p>
           </div>

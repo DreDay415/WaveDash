@@ -23,7 +23,13 @@ export function SyncTimelineChart({ data, className }: SyncTimelineChartProps) {
   }));
 
   return (
-    <Card className={cn("", className)}>
+    <Card
+      className={cn(
+        "group relative overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-primary/20 hover:border-primary/40",
+        className
+      )}
+    >
+      <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 skew-y-6 bg-gradient-to-br from-primary/30 via-primary/10 to-transparent opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100" />
       <CardHeader>
         <CardTitle className="text-lg">Sync Activity (Last 24 Hours)</CardTitle>
       </CardHeader>
