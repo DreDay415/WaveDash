@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Color tokens */
+    --background: 240 60% 3%;           /* #0a0a0f */
+    --surface: 240 35% 8%;              /* #13131a */
+    --surface-elevated: 240 30% 12%;    /* #1a1a24 */
+    
+    --primary: 258 90% 66%;             /* #8b5cf6 */
+    --primary-hover: 258 90% 76%;       /* #a78bfa */
+    --primary-light: 258 90% 66% / 0.1;
+    
+    --success: 158 64% 52%;             /* #10b981 */
+    --success-light: 158 64% 52% / 0.1;
+    
+    --warning: 38 92% 50%;              /* #f59e0b */
+    --warning-light: 38 92% 50% / 0.1;
+    
+    --error: 4 90% 58%;                 /* #ef4444 */
+    --error-light: 4 90% 58% / 0.1;
+    
+    --text-primary: 210 40% 98%;        /* #f8fafc */
+    --text-secondary: 215 20% 65%;      /* #94a3b8 */
+    --text-muted: 215 16% 47%;          /* #64748b */
+    
+    --border: 215 20% 65% / 0.1;
+    --border-hover: 215 20% 65% / 0.2;
+    
+    /* Typography tokens */
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    
+    /* Border radius tokens */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+  }
+  
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-text-primary;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-surface;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-surface-elevated rounded-lg;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-text-muted;
+  }
+}
+
+@layer utilities {
+  /* Glassmorphism effect */
+  .glass {
+    backdrop-filter: blur(12px);
+    background: rgba(19, 19, 26, 0.8);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+  }
+  
+  /* Shimmer loading effect */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+  
+  /* Focus visible styles */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+}
