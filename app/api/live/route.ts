@@ -1,9 +1,34 @@
-import { generateMockMetrics, generateMockCallVolume } from '@/lib/mock-data';
+const FIVE9_API_BASE = process.env.NEXT_PUBLIC_FIVE9_API_BASE || 'http://137.184.114.183:8080';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const UPDATE_INTERVAL_MS = 30000;
+
+async function fetchRealMetrics() {
+  try {
+    const response = await fetch(`${FIVE9_API_BASE}/health`, { cache: 'no-store' });
+    if (!response.ok) throw new Error('Health check failed');
+    
+    const metricsResponse = await fetch(`${FIVE9_API_BASE}/metrics`, { cache: 'no-store' });
+    const metricsText = await metricsResponse.text();
+    
+    const successMatch = metricsText.match(/files_processed_total\{status="success"[^}]*\}\s+(\d+)/);
+    const filesProcessed = successMatch ? parseInt(successMatch[1], 10) : 0;
+    
+    return {
+      lastRun: {
+        timestamp: new Date().toISOString(),
+        status: 'success',
+        duration: 0,
+        filesTransferred: filesProcessed,
+        bytesTransferred: filesProcessed * 5 * 1024 * 1024,
+      },
+    };
+  } catch {
+    return null;
+  }
+}
 
 export async function GET(request: Request) {
   const encoder = new TextEncoder();
@@ -18,10 +43,10 @@ export async function GET(request: Request) {
       };
 
       const sendAll = async () => {
-        const metrics = generateMockMetrics();
-        const callVolume = generateMockCallVolume();
-        send('metrics', metrics);
-        send('callVolume', callVolume);
+        const metrics = await fetchRealMetrics();
+        if (metrics) {
+          send('metrics', metrics);
+        }
       };
 
       try {
