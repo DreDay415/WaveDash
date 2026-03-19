@@ -2,6 +2,11 @@ import { NextResponse } from 'next/server';
 
 const FIVE9_API_BASE = process.env.NEXT_PUBLIC_FIVE9_API_BASE || 'http://137.184.114.183:8080';
 
+// Disable all caching - MUST be at the top
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+
 interface HealthData {
   status: string;
   timestamp: string;
@@ -60,7 +65,7 @@ export async function GET() {
         status: healthData.status === 'healthy' ? 'success' : 'failed',
         duration: 0,
         filesTransferred: filesProcessed,
-        bytesTransferred: filesProcessed * 5 * 1024 * 1024, // Estimate 5MB per file
+        bytesTransferred: filesProcessed * 5 * 1024 * 1024,
       },
       nextScheduledRun: {
         timestamp: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
@@ -86,7 +91,13 @@ export async function GET() {
       recentActivity: generateRecentActivity(),
     };
 
-    return NextResponse.json(metrics);
+    return NextResponse.json(metrics, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      },
+    });
   } catch (error) {
     console.error('Error fetching Five9 metrics:', error);
     
@@ -159,9 +170,3 @@ function generateRecentActivity() {
   
   return activities.reverse();
 }
-
-export const dynamic = 'force-dynamic';
-
-// Disable caching completely
-export const revalidate = 0;
-export const fetchCache = 'force-no-store';
