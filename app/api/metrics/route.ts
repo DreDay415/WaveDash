@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const FIVE9_API_BASE = 'http://137.184.114.183:8080';
+const FIVE9_API_BASE = process.env.NEXT_PUBLIC_FIVE9_API_BASE || 'http://137.184.114.183:8080';
 
 interface HealthData {
   status: string;
