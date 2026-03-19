@@ -161,3 +161,7 @@ function generateRecentActivity() {
 }
 
 export const dynamic = 'force-dynamic';
+
+// Disable caching completely
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
