@@ -30,6 +30,8 @@ export async function GET() {
 
     // Fetch Prometheus metrics
     let filesProcessed = 0;
+    let avgTranscriptionTime = 0;
+    let avgNotionTime = 0;
     let filesFailed = 0;
     
     try {
@@ -47,6 +49,20 @@ export async function GET() {
         
         filesProcessed = successMatch ? parseInt(successMatch[1], 10) : 0;
         filesFailed = failureMatch ? parseInt(failureMatch[1], 10) : 0;
+
+        // Parse timing metrics
+        const transcriptionSumMatch = metricsText.match(/transcription_duration_seconds_sum[^}]*}\s+([\d.]+)/);
+        const transcriptionCountMatch = metricsText.match(/transcription_duration_seconds_count[^}]*}\s+(\d+)/);
+        const notionSumMatch = metricsText.match(/notion_api_duration_seconds_sum[^}]*}\s+([\d.]+)/);
+        const notionCountMatch = metricsText.match(/notion_api_duration_seconds_count[^}]*}\s+(\d+)/);
+
+        const transcriptionSum = transcriptionSumMatch ? parseFloat(transcriptionSumMatch[1]) : 0;
+        const transcriptionCount = transcriptionCountMatch ? parseInt(transcriptionCountMatch[1], 10) : 0;
+        const notionSum = notionSumMatch ? parseFloat(notionSumMatch[1]) : 0;
+        const notionCount = notionCountMatch ? parseInt(notionCountMatch[1], 10) : 0;
+
+        avgTranscriptionTime = transcriptionCount > 0 ? transcriptionSum / transcriptionCount : 0;
+        avgNotionTime = notionCount > 0 ? notionSum / notionCount : 0;
       }
     } catch (error) {
       console.error('Failed to fetch Prometheus metrics:', error);
@@ -63,7 +79,7 @@ export async function GET() {
       lastRun: {
         timestamp: healthData.timestamp,
         status: healthData.status === 'healthy' ? 'success' : 'failed',
-        duration: 0,
+        duration: avgTranscriptionTime + avgNotionTime,
         filesTransferred: filesProcessed,
         bytesTransferred: filesProcessed * 5 * 1024 * 1024,
       },
